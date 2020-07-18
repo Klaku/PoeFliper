@@ -25,6 +25,14 @@ namespace PoeFliper_DesktopApp.Services
                 Directory.CreateDirectory(path + "\\dist");
             }
             Install.DownloadDistFile("\\core.js", path);
+            //C:\Windows\System32\drivers\etc
+
+            string hostsContent = File.ReadAllText(@"C:\Windows\System32\drivers\etc\hosts");
+            if(hostsContent.IndexOf("127.0.0.1 poe.sniper.com") == -1)
+            {
+                hostsContent += "\n127.0.0.1 poe.sniper.com";
+            }
+            File.WriteAllText(@"C:\Windows\System32\drivers\etc\hosts", hostsContent);
         }
 
         private static void DownloadFile(string fileName, string path)

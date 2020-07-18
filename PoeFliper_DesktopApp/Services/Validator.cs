@@ -36,7 +36,7 @@ namespace PoeFliper_DesktopApp.Services
         {
             IPAddress adress = Dns.GetHostEntry("localhost").AddressList[0];
 
-            TcpListener lisener = new TcpListener(adress, 7654);
+            TcpListener lisener = new TcpListener(adress, 8510);
             bool portsAvalable = true;
             try
             {
