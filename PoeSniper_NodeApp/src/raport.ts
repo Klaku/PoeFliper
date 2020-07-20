@@ -1,14 +1,7 @@
 import fs from 'fs';
-import { IArchiveItem, IRaportItem } from './types';
+import { IArchiveItem, IRaportItem, PoeTradeItem } from './types';
 export default class RaportActions {
-    private path = __dirname+"\\appFiles\\Data.csv";
-    public StoreItemInformation(itemName:string, properties:string[][]){
-        let items = properties.map(x => {
-            if(x == null){
-                return ",,";
-            }
-            return x.join(',');
-        })
-        fs.appendFileSync(this.path, `${itemName},${Date.now()},${items.join(',')}\n`);
+    public static StoreItemInformation(itemID:string, properties:PoeTradeItem[]){
+        fs.appendFileSync(__dirname+"\\appFiles\\Data.csv", `${itemID},${Date.now()},${properties[0].Price},${properties[0].Currency},${properties[1].Price},${properties[1].Currency},${properties[2].Price},${properties[2].Currency}\n`);
     }
 }

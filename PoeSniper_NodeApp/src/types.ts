@@ -38,3 +38,9 @@ export interface IItem{
     Notify:string,
     LastNotify:string
 }
+
+export interface PoeTradeItem{
+    Price: number;
+    Currency: string; 
+    Status: string;
+}
