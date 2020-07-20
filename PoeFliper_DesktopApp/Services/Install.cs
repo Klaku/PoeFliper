@@ -20,11 +20,31 @@ namespace PoeFliper_DesktopApp.Services
             Install.DownloadFile("\\tsconfig.json", path);
             Install.DownloadFile("\\package-lock.json", path);
             Install.DownloadFile("\\package.json", path);
+            Install.DownloadFile("\\install.js", path);
             if (!Directory.Exists(path+"\\dist"))
             {
                 Directory.CreateDirectory(path + "\\dist");
             }
             Install.DownloadDistFile("\\core.js", path);
+            Install.DownloadDistFile("\\csvHelper.js", path);
+            Install.DownloadDistFile("\\express.js", path);
+            Install.DownloadDistFile("\\raport.js", path);
+            Install.DownloadDistFile("\\toaster.js", path);
+            Install.DownloadDistFile("\\types.js", path);
+            if (!Directory.Exists(path + "\\appFiles"))
+            {
+                Directory.CreateDirectory(path + "\\appFiles");
+            }
+            Install.DownloadAppFile("\\data.csv", path);
+            Install.DownloadAppFile("\\items.csv", path);
+            Install.DownloadAppFile("\\settings.txt", path);
+            if (!Directory.Exists(path + "\\public"))
+            {
+                Directory.CreateDirectory(path + "\\public");
+            }
+            Install.DownloadpublicFile("\\index.html", path);
+            Install.DownloadpublicFile("\\items.html", path);
+            Install.DownloadpublicFile("\\Settings.html", path);
             //C:\Windows\System32\drivers\etc
 
             string hostsContent = File.ReadAllText(@"C:\Windows\System32\drivers\etc\hosts");
@@ -48,6 +68,22 @@ namespace PoeFliper_DesktopApp.Services
             using (WebClient client = new WebClient())
             {
                 client.DownloadFile("https://raw.githubusercontent.com/Klaku/PoeFliper/master/PoeSniper_NodeApp/dist" + fileName, path + "\\dist" + fileName);
+            }
+        }
+
+        private static void DownloadAppFile(string fileName, string path)
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile("https://raw.githubusercontent.com/Klaku/PoeFliper/master/PoeSniper_NodeApp/appFiles" + fileName, path + "\\appFiles" + fileName);
+            }
+        }
+
+        private static void DownloadpublicFile(string fileName, string path)
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile("https://raw.githubusercontent.com/Klaku/PoeFliper/master/PoeSniper_NodeApp/public" + fileName, path + "\\public" + fileName);
             }
         }
     }
