@@ -50,7 +50,7 @@ export default class Toaster{
             return ItemsArray;
         }, exaltPrice, MirrorPrice);
         RaportActions.StoreItemInformation(item.ID, selectors);
-        if(selectors[0].Price !== 0){
+        if(selectors[0].Price !== 0 && item.Notify != "0"){
             this.ValidateWindowsAlert(item.ID, item.Name, selectors[0].Price, selectors[0].Currency, item.Path, Number(item.Price), item.Currency, exaltPrice, MirrorPrice);
         }
         

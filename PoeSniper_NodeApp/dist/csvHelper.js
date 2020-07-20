@@ -82,7 +82,7 @@ var CSV = /** @class */ (function () {
                 Price3: Number(array[4]),
             };
             return o;
-        });
+        }).filter(function (x) { return x.Time > Date.now() - 2678400000; });
         return items;
     };
     return CSV;

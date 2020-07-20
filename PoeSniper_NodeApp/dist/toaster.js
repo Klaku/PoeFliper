@@ -129,7 +129,7 @@ var Toaster = /** @class */ (function () {
                     case 3:
                         selectors = _a.sent();
                         raport_1.default.StoreItemInformation(item.ID, selectors);
-                        if (selectors[0].Price !== 0) {
+                        if (selectors[0].Price !== 0 && item.Notify != "0") {
                             this.ValidateWindowsAlert(item.ID, item.Name, selectors[0].Price, selectors[0].Currency, item.Path, Number(item.Price), item.Currency, exaltPrice, MirrorPrice);
                         }
                         return [2 /*return*/];
