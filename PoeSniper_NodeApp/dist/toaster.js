@@ -99,7 +99,7 @@ var Toaster = /** @class */ (function () {
                         return [4 /*yield*/, page.waitForSelector(this.selector, { timeout: 5000 })];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, page.evaluate(function () {
+                        return [4 /*yield*/, page.evaluate(function (ex, mp) {
                                 var ItemsArray = [];
                                 for (var ii = 0; ii < 3; ii++) {
                                     var priceSpan = document.querySelector("#trade > div.results > div.resultset > div:nth-child(" + (ii + 1) + ") > div.right > div > div.price > span > span:nth-child(3)");
@@ -108,7 +108,7 @@ var Toaster = /** @class */ (function () {
                                     if (priceSpan != null && currencySpan != null && status != null) {
                                         var c = currencySpan.textContent !== null ? currencySpan.textContent : "Chaos Orb";
                                         var pT = priceSpan.textContent !== null ? priceSpan.textContent : "0";
-                                        var p = c == "Chaos Orb" ? pT : c == "Exalted Orb" ? Number(pT) * Number(exaltPrice) : c == "Mirror of Kalandra" ? Number(pT) * Number(MirrorPrice) : 0;
+                                        var p = c == "Chaos Orb" ? pT : c == "Exalted Orb" ? Number(pT) * Number(ex) : c == "Mirror of Kalandra" ? Number(pT) * Number(mp) : 0;
                                         var o = {
                                             Price: Number(p),
                                             Currency: c,
@@ -125,7 +125,7 @@ var Toaster = /** @class */ (function () {
                                     }
                                 }
                                 return ItemsArray;
-                            })];
+                            }, exaltPrice, MirrorPrice)];
                     case 3:
                         selectors = _a.sent();
                         raport_1.default.StoreItemInformation(item.ID, selectors);
@@ -186,10 +186,10 @@ var Toaster = /** @class */ (function () {
         if (AlertCurrency == "Chaos Orb" && AlertPrice > ChaosItemPrice) {
             this.SendWindowsAlert(ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
-        if (AlertCurrency == "Exalted Orb" && AlertPrice > ChaosItemPrice * ExPrice) {
+        if (AlertCurrency == "Exalted Orb" && AlertPrice * ExPrice > ChaosItemPrice) {
             this.SendWindowsAlert(ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
-        if (AlertCurrency == "Mirror of Kalandra" && AlertPrice > ChaosItemPrice * MirPrice) {
+        if (AlertCurrency == "Mirror of Kalandra" && AlertPrice * MirPrice > ChaosItemPrice) {
             this.SendWindowsAlert(ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
     };

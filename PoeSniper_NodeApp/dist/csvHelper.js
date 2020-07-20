@@ -25,6 +25,20 @@ var CSV = /** @class */ (function () {
         });
         return array;
     };
+    CSV.addItem = function (itemName, itemID) {
+        var items = CSV.getItems();
+        var o = {
+            Name: "New Item",
+            ID: itemID,
+            Path: itemName,
+            Currency: "Chaos Orb",
+            Price: "0",
+            Notify: "0",
+            LastNotify: Date.now().toString()
+        };
+        items.push(o);
+        CSV.writeItems(items);
+    };
     CSV.delateItem = function (itemID) {
         CSV.writeItems(CSV.getItems().filter(function (x) { return x.ID !== itemID; }));
     };

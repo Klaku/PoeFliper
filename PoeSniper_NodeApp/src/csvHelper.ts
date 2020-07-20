@@ -20,6 +20,21 @@ export default class CSV{
         return array;
     }
 
+    public static addItem(itemName:string, itemID: string){
+        var items: IItem[] = CSV.getItems();
+        var o:IItem = {
+            Name: "New Item",
+            ID: itemID,
+            Path: itemName,
+            Currency: "Chaos Orb",
+            Price: "0",
+            Notify:"0",
+            LastNotify:Date.now().toString()
+        }
+        items.push(o);
+        CSV.writeItems(items);
+    }
+
     public static delateItem(itemID:string){
         CSV.writeItems(CSV.getItems().filter(x => x.ID !== itemID));
     }
@@ -56,7 +71,7 @@ export default class CSV{
                 Price3:Number(array[4]),
             }
             return o;
-        });
+        }).filter(x => x.Time > Date.now()-2678400000);
         return items;
     }
 }

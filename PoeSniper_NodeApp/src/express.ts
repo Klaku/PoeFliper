@@ -19,6 +19,11 @@ export default class ExpressApp{
             rep.send(CSV.getItems());
         });
 
+        app.post('/items/add', (req,rep)=>{
+            CSV.addItem(req.body.p, req.body.i);
+            rep.send();
+        })
+
         app.post('/items/update',(req,rep)=>{
             CSV.UpdateItem(req.body.i, req.body.p, req.body.v);
             rep.send();

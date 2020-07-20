@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Hello, world!</title>
+    <title>Sniper Dashboard</title>
     <style>
         .hoverable{
 
@@ -59,7 +59,32 @@
               
             </tbody>
           </table>
+          <div style="text-align:right">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal">
+                Add Item
+              </button>
+          </div>
     </div>
+
+    <div class="modal" id="AddModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add Item</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control form-control-sm" id="TradeLinkInput" type="text" placeholder="Trade URL">
+            </div>
+            <div class="modal-footer">
+              <button type="button" onclick="SaveNewItem()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script
@@ -74,6 +99,11 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
     <script>
+        function SaveNewItem(){
+            $.post("/items/add",{p:document.getElementById('TradeLinkInput').value, i:CreateGuid(32)}, ()=>{
+                init();
+            })
+        }
         async function init(){ 
             fetch('/items').then(response => response.json()).then(data =>{
                 $('body > div > table > tbody').html("");
@@ -141,7 +171,7 @@
 
             function CreateInputValue(id,guid, value){
                 return '<div id="text'+guid+'" class="hoverable" onclick="ShowInput(\''+guid+'\')">'+value+'</div>'+
-                '<form style="display:none" id="input'+guid+'" onsubmit="Update(\''+id+'\',\'Price\',this.children[0].value)"><input type="number" class="form-control" value="'+value+'" ></form>';
+                '<form style="display:none" id="input'+guid+'" onsubmit="Update(\''+id+'\',\'Price\',this.children[0].value)"><input type="number" step=".1" class="form-control" value="'+value+'" ></form>';
             }
         }
 

@@ -21,6 +21,10 @@ var ExpressApp = /** @class */ (function () {
             rep.type('json');
             rep.send(csvHelper_1.default.getItems());
         });
+        app.post('/items/add', function (req, rep) {
+            csvHelper_1.default.addItem(req.body.p, req.body.i);
+            rep.send();
+        });
         app.post('/items/update', function (req, rep) {
             csvHelper_1.default.UpdateItem(req.body.i, req.body.p, req.body.v);
             rep.send();

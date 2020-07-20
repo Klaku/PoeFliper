@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <title>Hello, world!</title>
+    <title>Sniper Dashboard</title>
 </head>
 
 <body style="background-color: #555;">
@@ -34,7 +34,6 @@
     <div class="container">
         <div style="display: flex; flex-direction: row; justify-content: space-around">
             <div>
-                <label>Item:</label>
                 <div class="dropdown show">
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select Item
@@ -152,7 +151,7 @@
         function Init(){
             $.get('/items', function(response){
                 response.forEach(element => {
-                    $('#ItemNameContainerForDropDown').append('<a href="#" onclick="SelectItem(\''+element.ID+'\',\''+element.Name+'\')">'+element.Name+'</a>')
+                    $('#ItemNameContainerForDropDown').append('<a href="#" style="display:block; padding:5px; width:250px; text-align:center;" onclick="SelectItem(\''+element.ID+'\',\''+element.Name+'\')">'+element.Name+'</a>')
                 });
                 items = response;
             });

@@ -1,4 +1,3 @@
-import fs from 'fs';
 import puppeteer from 'puppeteer';
 import { IItem, PoeTradeItem } from './types';
 import { notify } from 'node-notifier';
@@ -24,8 +23,7 @@ export default class Toaster{
     private async CheckItem(item:IItem, page:puppeteer.Page, exaltPrice:number, MirrorPrice:number){
         await page.goto(item.Path);
         await page.waitForSelector(this.selector, { timeout: 5000 });
-
-        let selectors:PoeTradeItem[] = await page.evaluate(()=>{
+        let selectors:PoeTradeItem[] = await page.evaluate((ex,mp)=>{
             let ItemsArray:PoeTradeItem[]= []
             for(var ii = 0; ii<3; ii++){
                 var priceSpan = document.querySelector("#trade > div.results > div.resultset > div:nth-child("+(ii+1)+") > div.right > div > div.price > span > span:nth-child(3)");
@@ -34,7 +32,7 @@ export default class Toaster{
                 if(priceSpan != null && currencySpan != null && status != null){
                     var c = currencySpan.textContent !== null ? currencySpan.textContent : "Chaos Orb";
                     var pT = priceSpan.textContent !== null ? priceSpan.textContent : "0";
-                    var p = c == "Chaos Orb" ? pT : c == "Exalted Orb" ? Number(pT) * Number(exaltPrice) : c == "Mirror of Kalandra" ? Number(pT) * Number(MirrorPrice) : 0;
+                    var p = c == "Chaos Orb" ? pT : c == "Exalted Orb" ? Number(pT) * Number(ex) : c == "Mirror of Kalandra" ? Number(pT) * Number(mp) : 0;
                     var o:PoeTradeItem = {
                         Price:Number(p),
                         Currency:c,
@@ -50,10 +48,10 @@ export default class Toaster{
                 }
             }
             return ItemsArray;
-        });
+        }, exaltPrice, MirrorPrice);
         RaportActions.StoreItemInformation(item.ID, selectors);
         if(selectors[0].Price !== 0){
-            this.ValidateWindowsAlert(item.ID, item.Name, selectors[0].Price, selectors[0].Currency, item.Path, Number(item.Price), item.Currency, exaltPrice, MirrorPrice)
+            this.ValidateWindowsAlert(item.ID, item.Name, selectors[0].Price, selectors[0].Currency, item.Path, Number(item.Price), item.Currency, exaltPrice, MirrorPrice);
         }
         
     }
@@ -84,11 +82,11 @@ export default class Toaster{
             this.SendWindowsAlert(ItemID,ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
 
-        if(AlertCurrency == "Exalted Orb" && AlertPrice > ChaosItemPrice*ExPrice){
+        if(AlertCurrency == "Exalted Orb" && AlertPrice*ExPrice > ChaosItemPrice){
             this.SendWindowsAlert(ItemID,ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
 
-        if(AlertCurrency == "Mirror of Kalandra" && AlertPrice > ChaosItemPrice*MirPrice){
+        if(AlertCurrency == "Mirror of Kalandra" && AlertPrice*MirPrice > ChaosItemPrice){
             this.SendWindowsAlert(ItemID,ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
     }
