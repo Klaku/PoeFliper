@@ -53,6 +53,21 @@ namespace PoeFliper_DesktopApp.Services
                 hostsContent += "\n127.0.0.1 poe.sniper.com";
             }
             File.WriteAllText(@"C:\Windows\System32\drivers\etc\hosts", hostsContent);
+
+            try
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                process.StartInfo.FileName = "node "+ path+ "\\dist";
+                process.StartInfo.Arguments = "";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.Start();
+                string response = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         private static void DownloadFile(string fileName, string path)
