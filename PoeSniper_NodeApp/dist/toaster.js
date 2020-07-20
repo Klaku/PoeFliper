@@ -52,31 +52,36 @@ var Toaster = /** @class */ (function () {
     }
     Toaster.prototype.Monitor = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var items, raports, browser, page, itemIndex;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var items, raports, browser, page, _a, _b, _c, itemIndex;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         items = this.GetFileContent();
                         raports = new raport_1.default();
                         return [4 /*yield*/, puppeteer_1.default.launch()];
                     case 1:
-                        browser = _a.sent();
+                        browser = _d.sent();
                         return [4 /*yield*/, browser.newPage()];
                     case 2:
-                        page = _a.sent();
-                        itemIndex = 0;
-                        _a.label = 3;
+                        page = _d.sent();
+                        _b = (_a = console).log;
+                        _c = "Ex Price: ";
+                        return [4 /*yield*/, this.getExaltedPrice(page)];
                     case 3:
-                        if (!(itemIndex < items.length)) return [3 /*break*/, 6];
+                        _b.apply(_a, [_c + (_d.sent())]);
+                        itemIndex = 0;
+                        _d.label = 4;
+                    case 4:
+                        if (!(itemIndex < items.length)) return [3 /*break*/, 7];
                         console.log("scaning " + itemIndex + "/" + items.length);
                         return [4 /*yield*/, this.CheckItem(items[itemIndex], page, raports)];
-                    case 4:
-                        _a.sent();
-                        _a.label = 5;
                     case 5:
-                        itemIndex++;
-                        return [3 /*break*/, 3];
+                        _d.sent();
+                        _d.label = 6;
                     case 6:
+                        itemIndex++;
+                        return [3 /*break*/, 4];
+                    case 7:
                         browser.close();
                         return [2 /*return*/];
                 }
@@ -132,6 +137,28 @@ var Toaster = /** @class */ (function () {
                         selectors = _a.sent();
                         action.StoreItemInformation(item.Name, selectors);
                         return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Toaster.prototype.getExaltedPrice = function (page) {
+        return __awaiter(this, void 0, void 0, function () {
+            var string;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, page.goto("https://poe.ninja/challenge/currency/exalted-orb")];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, page.waitForSelector("tr:nth-child(1) div:nth-child(2) span.currency-amount", { timeout: 5000 })];
+                    case 2:
+                        _a.sent();
+                        return [4 /*yield*/, page.evaluate(function () {
+                                var selector = document.querySelector('tr:nth-child(1) div:nth-child(2) span.currency-amount');
+                                return selector === null || selector === void 0 ? void 0 : selector.getAttribute("title");
+                            })];
+                    case 3:
+                        string = _a.sent();
+                        return [2 /*return*/, string];
                 }
             });
         });

@@ -1,5 +1,5 @@
 export interface IArchiveItem{
-    Name:string,
+    ID:string,
     Price:string,
     Currency:string,
     Time:number
