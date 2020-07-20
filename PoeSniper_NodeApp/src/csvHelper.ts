@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { IItem } from './types';
+import { IItem, IDataItem } from './types';
 export default class CSV{
     public static getItems():IItem[]{
         var file: string[] = fs.readFileSync(__dirname+'\\appFiles\\items.csv').toString().split('\n').filter(x => x.indexOf(',') != -1);
@@ -25,20 +25,38 @@ export default class CSV{
     }
 
     public static writeItems(items:IItem[]){
-        fs.writeFileSync(__dirname+'\\appFiles\\items.csv', items.join('\n'));
+        fs.writeFileSync(__dirname+'\\appFiles\\items.csv', items.map(x => {
+            return [x.Name, x.Path, x.Price, x.Currency, x.ID, x.Notify, x.LastNotify].join(',');
+        }).join('\n'));
     }
 
     public static UpdateItem(itemID:string, itemProperty:string, Value:string){
         let items:IItem[] = CSV.getItems();
         let item:IItem = items.filter(x => x.ID == itemID)[0];
         switch(itemProperty){
-            case "Name": item.Name = itemProperty; break;
-            case "Price": item.Price = itemProperty; break;
-            case "Currency": item.Currency = itemProperty; break;
-            case "Notify": item.Notify = itemProperty; break;
-            case "LastNotify": item.LastNotify = itemProperty; break;
+            case "Name": item.Name = Value; break;
+            case "Price": item.Price = Value; break;
+            case "Currency": item.Currency = Value; break;
+            case "Notify": item.Notify = Value; break;
+            case "LastNotify": item.LastNotify = Value; break;
             default: break;
         }
-        CSV.writeItems(items.filter(x => x.ID == itemID).concat([item]));
+        CSV.writeItems(items.filter(x => x.ID != itemID).concat([item]));
+    }
+
+    public static GetData(id:string):IDataItem[]{
+        var file = fs.readFileSync(__dirname+'\\appFiles\\data.csv').toString().split('\n').filter(x => x.indexOf(id) !== -1);
+        var items:IDataItem[] = file.map(x => {
+            var array = x.split(',');
+            var o:IDataItem = {
+                ID:array[0],
+                Time:Number(array[1]),
+                Price1:Number(array[2]),
+                Price2:Number(array[3]),
+                Price3:Number(array[4]),
+            }
+            return o;
+        });
+        return items;
     }
 }

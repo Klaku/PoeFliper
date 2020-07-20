@@ -40,23 +40,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var toaster_1 = __importDefault(require("./toaster"));
+var node_schedule_1 = __importDefault(require("node-schedule"));
 var express_1 = __importDefault(require("./express"));
-function foo() {
+var monitor = node_schedule_1.default.scheduleJob('0 */2 * * * *', function () {
     return __awaiter(this, void 0, void 0, function () {
-        var toast;
+        var m;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    toast = new toaster_1.default();
-                    return [4 /*yield*/, toast.Monitor()];
+                    m = new toaster_1.default();
+                    return [4 /*yield*/, m.Monitor()];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     });
-}
-foo();
+});
 // const raport = shedule.scheduleJob('*/10 * * * * *', ()=>{
 //     let raport = new RaportActions();
 //     raport.CreateRaport();

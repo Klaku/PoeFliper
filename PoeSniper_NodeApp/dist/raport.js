@@ -6,16 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
 var RaportActions = /** @class */ (function () {
     function RaportActions() {
-        this.path = __dirname + "\\appFiles\\Data.csv";
     }
-    RaportActions.prototype.StoreItemInformation = function (itemName, properties) {
-        var items = properties.map(function (x) {
-            if (x == null) {
-                return ",,";
-            }
-            return x.join(',');
-        });
-        fs_1.default.appendFileSync(this.path, itemName + "," + Date.now() + "," + items.join(',') + "\n");
+    RaportActions.StoreItemInformation = function (itemID, properties) {
+        fs_1.default.appendFileSync(__dirname + "\\appFiles\\Data.csv", itemID + "," + Date.now() + "," + properties[0].Price + "," + properties[1].Price + "," + properties[2].Price + "\n");
     };
     return RaportActions;
 }());

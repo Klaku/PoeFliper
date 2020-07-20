@@ -1,7 +1,7 @@
 import express from 'express';
 import puppeteer from 'puppeteer';
 import bodyParser from "body-parser";
-import { IItem, IArchiveItem } from './types';
+import { IItem } from './types';
 import CSV from './csvHelper';
 export default class ExpressApp{
     public Init(){
@@ -27,6 +27,10 @@ export default class ExpressApp{
         app.post('/items/delete', (req,rep)=>{
             CSV.delateItem(req.body.i);
             rep.send();
+        })
+
+        app.get('/data/:id', (req,rep)=>{
+            rep.send(CSV.GetData(req.params.id));
         })
 
         app.listen(8510);

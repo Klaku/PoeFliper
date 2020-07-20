@@ -39,12 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs_1 = __importDefault(require("fs"));
 var puppeteer_1 = __importDefault(require("puppeteer"));
-// import cheerio from 'cheerio';
 var node_notifier_1 = require("node-notifier");
 var child_process_1 = require("child_process");
 var raport_1 = __importDefault(require("./raport"));
+var csvHelper_1 = __importDefault(require("./csvHelper"));
 var Toaster = /** @class */ (function () {
     function Toaster() {
         this.path = __dirname + "\\appFiles\\items.csv";
@@ -52,66 +51,49 @@ var Toaster = /** @class */ (function () {
     }
     Toaster.prototype.Monitor = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var items, raports, browser, page, _a, _b, _c, itemIndex;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var items, browser, page, ExPrice, _a, MirrorPrice, _b, i;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        items = this.GetFileContent();
-                        raports = new raport_1.default();
+                        items = csvHelper_1.default.getItems();
                         return [4 /*yield*/, puppeteer_1.default.launch()];
                     case 1:
-                        browser = _d.sent();
+                        browser = _c.sent();
                         return [4 /*yield*/, browser.newPage()];
                     case 2:
-                        page = _d.sent();
-                        _b = (_a = console).log;
-                        _c = "Ex Price: ";
+                        page = _c.sent();
+                        _a = Number;
                         return [4 /*yield*/, this.getExaltedPrice(page)];
                     case 3:
-                        _b.apply(_a, [_c + (_d.sent())]);
-                        itemIndex = 0;
-                        _d.label = 4;
+                        ExPrice = _a.apply(void 0, [_c.sent()]);
+                        _b = Number;
+                        return [4 /*yield*/, this.getMirrorPrice(page)];
                     case 4:
-                        if (!(itemIndex < items.length)) return [3 /*break*/, 7];
-                        console.log("scaning " + itemIndex + "/" + items.length);
-                        return [4 /*yield*/, this.CheckItem(items[itemIndex], page, raports)];
+                        MirrorPrice = _b.apply(void 0, [_c.sent()]);
+                        i = 0;
+                        _c.label = 5;
                     case 5:
-                        _d.sent();
-                        _d.label = 6;
+                        if (!(i < items.length)) return [3 /*break*/, 8];
+                        return [4 /*yield*/, this.CheckItem(items[i], page, ExPrice, MirrorPrice)];
                     case 6:
-                        itemIndex++;
-                        return [3 /*break*/, 4];
+                        _c.sent();
+                        _c.label = 7;
                     case 7:
+                        i++;
+                        return [3 /*break*/, 5];
+                    case 8:
                         browser.close();
                         return [2 /*return*/];
                 }
             });
         });
     };
-    Toaster.prototype.GetFileContent = function () {
-        return fs_1.default.readFileSync(this.path).toString().split('\n').filter(function (x) { return x.indexOf(',') != -1; }).map(function (x) {
-            var y = x.split(',');
-            var o = {
-                Name: y[0],
-                Path: y[1],
-                Price: y[2],
-                Currency: y[3],
-                ID: y[4],
-                Notify: y[5],
-                LastNotify: y[6]
-            };
-            return o;
-        });
-    };
-    Toaster.prototype.CheckItem = function (item, page, action) {
+    Toaster.prototype.CheckItem = function (item, page, exaltPrice, MirrorPrice) {
         return __awaiter(this, void 0, void 0, function () {
             var selectors;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        if (typeof item == "undefined" || item.Notify == "0")
-                            return [2 /*return*/];
-                        return [4 /*yield*/, page.goto(item.Path)];
+                    case 0: return [4 /*yield*/, page.goto(item.Path)];
                     case 1:
                         _a.sent();
                         return [4 /*yield*/, page.waitForSelector(this.selector, { timeout: 5000 })];
@@ -119,23 +101,37 @@ var Toaster = /** @class */ (function () {
                         _a.sent();
                         return [4 /*yield*/, page.evaluate(function () {
                                 var ItemsArray = [];
-                                for (var index = 0; index < 3; index++) {
-                                    var priceSpan = document.querySelector("#trade > div.results > div.resultset > div:nth-child(" + (index + 1) + ") > div.right > div > div.price > span > span:nth-child(3)");
-                                    var currencySpan = document.querySelector("#trade > div.results > div.resultset > div:nth-child(" + (index + 1) + ") > div.right > div > div.price > span > span.currency-text.currency-image > span");
-                                    var status = document.querySelector("#trade > div.results > div.resultset > div:nth-child(" + (index + 1) + ") > div.right > div > div.btns > span.pull-left > span.status");
+                                for (var ii = 0; ii < 3; ii++) {
+                                    var priceSpan = document.querySelector("#trade > div.results > div.resultset > div:nth-child(" + (ii + 1) + ") > div.right > div > div.price > span > span:nth-child(3)");
+                                    var currencySpan = document.querySelector("#trade > div.results > div.resultset > div:nth-child(" + (ii + 1) + ") > div.right > div > div.price > span > span.currency-text.currency-image > span");
+                                    var status = document.querySelector("#trade > div.results > div.resultset > div:nth-child(" + (ii + 1) + ") > div.right > div > div.btns > span.pull-left > span.status");
                                     if (priceSpan != null && currencySpan != null && status != null) {
-                                        ItemsArray[index] = [
-                                            priceSpan.textContent !== null ? priceSpan.textContent : "0",
-                                            currencySpan.textContent !== null ? currencySpan.textContent : "Chaos Orb",
-                                            status.textContent !== null ? status.textContent : "Offline",
-                                        ];
+                                        var c = currencySpan.textContent !== null ? currencySpan.textContent : "Chaos Orb";
+                                        var pT = priceSpan.textContent !== null ? priceSpan.textContent : "0";
+                                        var p = c == "Chaos Orb" ? pT : c == "Exalted Orb" ? Number(pT) * Number(exaltPrice) : c == "Mirror of Kalandra" ? Number(pT) * Number(MirrorPrice) : 0;
+                                        var o = {
+                                            Price: Number(p),
+                                            Currency: c,
+                                            Status: status.textContent !== null ? status.textContent : "Offline"
+                                        };
+                                        ItemsArray.push(o);
+                                    }
+                                    else {
+                                        var o = {
+                                            Price: 0,
+                                            Currency: "Chaos Orb",
+                                            Status: "Offline"
+                                        };
                                     }
                                 }
                                 return ItemsArray;
                             })];
                     case 3:
                         selectors = _a.sent();
-                        action.StoreItemInformation(item.Name, selectors);
+                        raport_1.default.StoreItemInformation(item.ID, selectors);
+                        if (selectors[0].Price !== 0) {
+                            this.ValidateWindowsAlert(item.ID, item.Name, selectors[0].Price, selectors[0].Currency, item.Path, Number(item.Price), item.Currency, exaltPrice, MirrorPrice);
+                        }
                         return [2 /*return*/];
                 }
             });
@@ -163,23 +159,50 @@ var Toaster = /** @class */ (function () {
             });
         });
     };
-    Toaster.prototype.ValidateWindowsAlert = function (Model, currentPrice, currentCurrency) {
-        if (currentCurrency == "Chaos Orb" && currentPrice < Model.ChaosAlert) {
-            this.SendWindowsAlert(Model.Name, Model.ChaosAlert, Model.Url, currentCurrency, currentPrice);
+    Toaster.prototype.getMirrorPrice = function (page) {
+        return __awaiter(this, void 0, void 0, function () {
+            var string;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, page.goto("https://poe.ninja/challenge/currency/mirror-of-kalandra")];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, page.waitForSelector("tr:nth-child(1) div:nth-child(2) span.currency-amount", { timeout: 5000 })];
+                    case 2:
+                        _a.sent();
+                        return [4 /*yield*/, page.evaluate(function () {
+                                var selector = document.querySelector('tr:nth-child(1) div:nth-child(2) span.currency-amount');
+                                return selector === null || selector === void 0 ? void 0 : selector.getAttribute("title");
+                            })];
+                    case 3:
+                        string = _a.sent();
+                        return [2 /*return*/, string];
+                }
+            });
+        });
+    };
+    Toaster.prototype.ValidateWindowsAlert = function (ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency, ExPrice, MirPrice) {
+        var ChaosItemPrice = ItemCurrency == "Chaos Orb" ? ItemPrice : ItemCurrency == "Exalted Orb" ? ItemPrice * ExPrice : ItemCurrency == "Mirror of Kalandra" ? ItemPrice * MirPrice : ItemPrice;
+        if (AlertCurrency == "Chaos Orb" && AlertPrice > ChaosItemPrice) {
+            this.SendWindowsAlert(ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
-        if (currentCurrency == "Exalted Orb" && currentPrice < Model.ExaltedAlert) {
-            this.SendWindowsAlert(Model.Name, Model.ExaltedAlert, Model.Url, currentCurrency, currentPrice);
+        if (AlertCurrency == "Exalted Orb" && AlertPrice > ChaosItemPrice * ExPrice) {
+            this.SendWindowsAlert(ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
+        }
+        if (AlertCurrency == "Mirror of Kalandra" && AlertPrice > ChaosItemPrice * MirPrice) {
+            this.SendWindowsAlert(ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
     };
-    Toaster.prototype.SendWindowsAlert = function (name, currency, url, currentCurrency, currentPrice) {
+    Toaster.prototype.SendWindowsAlert = function (ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency) {
         node_notifier_1.notify({
-            title: "Znalazłem nowy flip",
-            message: name + " zosta\u0142 wystawiony za " + currentPrice + " " + currentCurrency + "\nUstawi\u0142e\u015B powiadomienia na kwote " + currency
+            title: "Time to Snipe!",
+            message: ItemName + " wystawiony za " + ItemPrice + " " + ItemCurrency + "\n Ustawi\u0142e\u015B powiadomienia na kwote " + AlertPrice + " " + AlertCurrency
         }, function (error, response, metadata) {
             if (response == "activate" && (metadata === null || metadata === void 0 ? void 0 : metadata.activationType) == "clicked") {
-                child_process_1.exec("start \"\" \"" + url + "\"");
+                child_process_1.exec("start \"\" \"" + ItemURL + "\"");
             }
         });
+        csvHelper_1.default.UpdateItem(ItemID, "LastNotify", Date.now().toString());
     };
     return Toaster;
 }());

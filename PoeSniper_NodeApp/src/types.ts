@@ -1,7 +1,8 @@
-export interface IArchiveItem{
+export interface IDataItem{
     ID:string,
-    Price:string,
-    Currency:string,
+    Price1:number,
+    Price2:number,
+    Price3:number,
     Time:number
 }
 

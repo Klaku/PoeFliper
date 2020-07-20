@@ -15,11 +15,9 @@ export default class Toaster{
         const page = await browser.newPage();
         var ExPrice = Number(await this.getExaltedPrice(page));
         var MirrorPrice = Number(await this.getMirrorPrice(page));
-
         for(let i=0; i<items.length; i++){
             await this.CheckItem(items[i], page, ExPrice, MirrorPrice);
         }
-
         browser.close();
     }
 
@@ -55,7 +53,7 @@ export default class Toaster{
         });
         RaportActions.StoreItemInformation(item.ID, selectors);
         if(selectors[0].Price !== 0){
-            this.ValidateWindowsAlert(item.Name, selectors[0].Price, selectors[0].Currency, item.Path, Number(item.Price), item.Currency, exaltPrice, MirrorPrice)
+            this.ValidateWindowsAlert(item.ID, item.Name, selectors[0].Price, selectors[0].Currency, item.Path, Number(item.Price), item.Currency, exaltPrice, MirrorPrice)
         }
         
     }
@@ -80,21 +78,22 @@ export default class Toaster{
         return string;
     }
 
-    private ValidateWindowsAlert(ItemName:string, ItemPrice:number, ItemCurrency:string, ItemURL:string, AlertPrice:number, AlertCurrency:string, ExPrice:number, MirPrice:number){
-        if(AlertCurrency == "Chaos Orb" && AlertPrice > ItemPrice){
-            this.SendWindowsAlert(ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
+    private ValidateWindowsAlert(ItemID:string, ItemName:string, ItemPrice:number, ItemCurrency:string, ItemURL:string, AlertPrice:number, AlertCurrency:string, ExPrice:number, MirPrice:number){
+        let ChaosItemPrice = ItemCurrency == "Chaos Orb" ? ItemPrice : ItemCurrency == "Exalted Orb" ? ItemPrice*ExPrice : ItemCurrency == "Mirror of Kalandra"? ItemPrice* MirPrice : ItemPrice;
+        if(AlertCurrency == "Chaos Orb" && AlertPrice > ChaosItemPrice){
+            this.SendWindowsAlert(ItemID,ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
 
-        if(AlertCurrency == "Exalted Orb" && AlertPrice*ExPrice > ItemPrice){
-            this.SendWindowsAlert(ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
+        if(AlertCurrency == "Exalted Orb" && AlertPrice > ChaosItemPrice*ExPrice){
+            this.SendWindowsAlert(ItemID,ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
 
-        if(AlertCurrency == "Mirror of Kalandra" && AlertPrice*MirPrice > ItemPrice){
-            this.SendWindowsAlert(ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
+        if(AlertCurrency == "Mirror of Kalandra" && AlertPrice > ChaosItemPrice*MirPrice){
+            this.SendWindowsAlert(ItemID,ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency);
         }
     }
 
-    private SendWindowsAlert(ItemName:string, ItemPrice:number, ItemCurrency:string, ItemURL:string, AlertPrice:number, AlertCurrency:string){
+    private SendWindowsAlert(ItemID:string, ItemName:string, ItemPrice:number, ItemCurrency:string, ItemURL:string, AlertPrice:number, AlertCurrency:string){
         notify({
             title:"Time to Snipe!",
             message:`${ItemName} wystawiony za ${ItemPrice} ${ItemCurrency}\n Ustawiłeś powiadomienia na kwote ${AlertPrice} ${AlertCurrency}`
@@ -103,5 +102,6 @@ export default class Toaster{
                 exec(`start "" "${ItemURL}"`)
             }
         })
+        CSV.UpdateItem(ItemID, "LastNotify", Date.now().toString());
     }
 }
