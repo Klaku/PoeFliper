@@ -11,7 +11,7 @@ var ExpressApp = /** @class */ (function () {
     }
     ExpressApp.prototype.Init = function () {
         var app = express_1.default();
-        app.use(express_1.default.static('public'));
+        app.use(express_1.default.static(__dirname + '\\public'));
         app.use(body_parser_1.default.json());
         app.use(body_parser_1.default.urlencoded({ extended: true }));
         app.get('/', function (req, rep) {

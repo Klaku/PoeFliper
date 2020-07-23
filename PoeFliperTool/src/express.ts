@@ -5,7 +5,7 @@ export default class ExpressApp{
     public Init(){
         const app = express();
 
-        app.use(express.static('public'));
+        app.use(express.static(__dirname+'\\public'));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         app.get('/',(req,rep)=>{

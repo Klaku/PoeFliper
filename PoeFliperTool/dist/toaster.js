@@ -194,7 +194,7 @@ var Toaster = /** @class */ (function () {
     };
     Toaster.prototype.SendWindowsAlert = function (ItemID, ItemName, ItemPrice, ItemCurrency, ItemURL, AlertPrice, AlertCurrency) {
         node_notifier_1.notify({
-            title: "Time to Snipe!",
+            title: "Time to Flip!",
             message: ItemName + " wystawiony za " + ItemPrice + " " + ItemCurrency + "\n Ustawi\u0142e\u015B powiadomienia na kwote " + AlertPrice + " " + AlertCurrency
         }, function (error, response, metadata) {
             if (response == "activate" && (metadata === null || metadata === void 0 ? void 0 : metadata.activationType) == "clicked") {
