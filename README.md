@@ -13,3 +13,8 @@ $ npm install
 $ node install.js
 ```
   - Go to [Dashboard](http://localhost:8510) and save it on Bookmark Panel
+
+
+![alt text](https://i.imgur.com/lYAllSw.png)
+
+![alt text](https://i.imgur.com/vvlswXa.png)
