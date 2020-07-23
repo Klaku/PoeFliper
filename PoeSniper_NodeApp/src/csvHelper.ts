@@ -2,9 +2,13 @@ import fs from 'fs';
 import { IItem, IDataItem } from './types';
 export default class CSV{
     public static getItems():IItem[]{
-        var file: string[] = fs.readFileSync(__dirname+'\\appFiles\\items.csv').toString().split('\n').filter(x => x.indexOf(',') != -1);
-        var array:IItem[] = [];
-        file.forEach(row =>{
+        let output:IItem[] = [];
+        fs
+        .readFileSync(__dirname+'\\appFiles\\items.csv')
+        .toString()
+        .split('\n')
+        .filter(x => x.indexOf(',') != -1)
+        .forEach(row =>{
             let item = row.split(',');
             let parsedItem:IItem = {
                 Name: item[0],
@@ -15,9 +19,9 @@ export default class CSV{
                 Notify: item[5],
                 LastNotify: item[6]
             }
-            array.push(parsedItem);
+            output.push(parsedItem);
         })
-        return array;
+        return output;
     }
 
     public static addItem(itemName:string, itemID: string){

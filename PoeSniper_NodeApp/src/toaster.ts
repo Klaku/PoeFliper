@@ -6,7 +6,6 @@ import RaportActions from './raport';
 import CSV from './csvHelper';
 
 export default class Toaster{
-    private path = __dirname+"\\appFiles\\items.csv";
     private selector = "#trade > div.results > div.resultset > div > div.right > div > div.price > span";
     public async Monitor(){
         let items:IItem[] = CSV.getItems();
