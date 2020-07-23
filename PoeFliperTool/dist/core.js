@@ -57,8 +57,4 @@ var monitor = node_schedule_1.default.scheduleJob('0 * * * * *', function () {
         });
     });
 });
-// const raport = shedule.scheduleJob('*/10 * * * * *', ()=>{
-//     let raport = new RaportActions();
-//     raport.CreateRaport();
-// })
 new express_1.default().Init();

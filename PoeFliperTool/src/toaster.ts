@@ -92,7 +92,7 @@ export default class Toaster{
 
     private SendWindowsAlert(ItemID:string, ItemName:string, ItemPrice:number, ItemCurrency:string, ItemURL:string, AlertPrice:number, AlertCurrency:string){
         notify({
-            title:"Time to Snipe!",
+            title:"Time to Flip!",
             message:`${ItemName} wystawiony za ${ItemPrice} ${ItemCurrency}\n Ustawiłeś powiadomienia na kwote ${AlertPrice} ${AlertCurrency}`
         }, (error, response, metadata)=>{
             if(response == "activate" && metadata?.activationType == "clicked"){

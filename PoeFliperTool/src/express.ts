@@ -1,7 +1,5 @@
 import express from 'express';
-import puppeteer from 'puppeteer';
 import bodyParser from "body-parser";
-import { IItem } from './types';
 import CSV from './csvHelper';
 export default class ExpressApp{
     public Init(){

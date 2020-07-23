@@ -8,9 +8,13 @@ var CSV = /** @class */ (function () {
     function CSV() {
     }
     CSV.getItems = function () {
-        var file = fs_1.default.readFileSync(__dirname + '\\appFiles\\items.csv').toString().split('\n').filter(function (x) { return x.indexOf(',') != -1; });
-        var array = [];
-        file.forEach(function (row) {
+        var output = [];
+        fs_1.default
+            .readFileSync(__dirname + '\\appFiles\\items.csv')
+            .toString()
+            .split('\n')
+            .filter(function (x) { return x.indexOf(',') != -1; })
+            .forEach(function (row) {
             var item = row.split(',');
             var parsedItem = {
                 Name: item[0],
@@ -21,9 +25,9 @@ var CSV = /** @class */ (function () {
                 Notify: item[5],
                 LastNotify: item[6]
             };
-            array.push(parsedItem);
+            output.push(parsedItem);
         });
-        return array;
+        return output;
     };
     CSV.addItem = function (itemName, itemID) {
         var items = CSV.getItems();

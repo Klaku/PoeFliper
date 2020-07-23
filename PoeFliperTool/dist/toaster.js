@@ -46,7 +46,6 @@ var raport_1 = __importDefault(require("./raport"));
 var csvHelper_1 = __importDefault(require("./csvHelper"));
 var Toaster = /** @class */ (function () {
     function Toaster() {
-        this.path = __dirname + "\\appFiles\\items.csv";
         this.selector = "#trade > div.results > div.resultset > div > div.right > div > div.price > span";
     }
     Toaster.prototype.Monitor = function () {
