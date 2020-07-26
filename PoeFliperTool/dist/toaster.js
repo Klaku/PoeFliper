@@ -80,8 +80,9 @@ var Toaster = /** @class */ (function () {
                     case 7:
                         i++;
                         return [3 /*break*/, 5];
-                    case 8:
-                        browser.close();
+                    case 8: return [4 /*yield*/, browser.close()];
+                    case 9:
+                        _c.sent();
                         return [2 /*return*/];
                 }
             });

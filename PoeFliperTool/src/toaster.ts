@@ -4,6 +4,7 @@ import { notify } from 'node-notifier';
 import { exec } from 'child_process';
 import RaportActions from './raport';
 import CSV from './csvHelper';
+import {EventLogger} from 'node-windows';
 
 export default class Toaster{
     private selector = "#trade > div.results > div.resultset > div > div.right > div > div.price > span";
@@ -16,7 +17,7 @@ export default class Toaster{
         for(let i=0; i<items.length; i++){
             await this.CheckItem(items[i], page, ExPrice, MirrorPrice);
         }
-        browser.close();
+        await browser.close();
     }
 
     private async CheckItem(item:IItem, page:puppeteer.Page, exaltPrice:number, MirrorPrice:number){
