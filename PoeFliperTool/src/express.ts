@@ -36,6 +36,15 @@ export default class ExpressApp{
             rep.send(CSV.GetData(req.params.id));
         })
 
+        app.get('/settings', (req,rep)=>{
+            rep.send(CSV.getSettings());
+        })
+
+        app.post('/settings', (req,rep)=>{
+            CSV.setSettingValue(req.body.name, req.body.value);
+            rep.send();
+        })
+
         app.listen(8510);
     }
 }

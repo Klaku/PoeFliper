@@ -6,6 +6,11 @@ export interface IDataItem{
     Time:number
 }
 
+export interface ISettings{
+    name:string,
+    value: string,
+}
+
 export interface IInputItem{
     Name:string,
     Url:string,

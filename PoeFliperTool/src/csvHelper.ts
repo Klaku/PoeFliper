@@ -1,6 +1,28 @@
 import fs from 'fs';
-import { IItem, IDataItem } from './types';
+import { IItem, IDataItem, ISettings } from './types';
 export default class CSV{
+    public static getSettings():ISettings[]{
+        let output:ISettings[] = [];
+        fs.readFileSync(__dirname+"\\appFiles\\settings.txt").toString().split('\n').filter(x => x.indexOf("#")==0).forEach(e =>{
+            output.push({
+                name:e.split('=')[0],
+                value:e.split('=')[1]
+            });
+        });
+        return output;
+    }
+
+    public static setSettingValue(name:string,value:string):void{
+        let file:string[] = fs.readFileSync(__dirname+"\\appFiles\\settings.txt").toString().split('\n');
+        let changedFile = file.map(x => {
+            if(x.indexOf("#"+name) != -1){
+                x = x.split('=')[0]+"="+value;
+            }
+            return x;
+        });
+        fs.writeFileSync(__dirname+"\\appFiles\\settings.txt", changedFile.join('\n'))
+    }
+
     public static getItems():IItem[]{
         let output:IItem[] = [];
         fs

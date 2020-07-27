@@ -7,6 +7,26 @@ var fs_1 = __importDefault(require("fs"));
 var CSV = /** @class */ (function () {
     function CSV() {
     }
+    CSV.getSettings = function () {
+        var output = [];
+        fs_1.default.readFileSync(__dirname + "\\appFiles\\settings.txt").toString().split('\n').filter(function (x) { return x.indexOf("#") == 0; }).forEach(function (e) {
+            output.push({
+                name: e.split('=')[0],
+                value: e.split('=')[1]
+            });
+        });
+        return output;
+    };
+    CSV.setSettingValue = function (name, value) {
+        var file = fs_1.default.readFileSync(__dirname + "\\appFiles\\settings.txt").toString().split('\n');
+        var changedFile = file.map(function (x) {
+            if (x.indexOf("#" + name) != -1) {
+                x = x.split('=')[0] + "=" + value;
+            }
+            return x;
+        });
+        fs_1.default.writeFileSync(__dirname + "\\appFiles\\settings.txt", changedFile.join('\n'));
+    };
     CSV.getItems = function () {
         var output = [];
         fs_1.default

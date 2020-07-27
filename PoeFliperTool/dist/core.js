@@ -42,7 +42,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var toaster_1 = __importDefault(require("./toaster"));
 var node_schedule_1 = __importDefault(require("node-schedule"));
 var express_1 = __importDefault(require("./express"));
-var monitor = node_schedule_1.default.scheduleJob('0 */5 * * * *', function () {
+var csvHelper_1 = __importDefault(require("./csvHelper"));
+var settings = csvHelper_1.default.getSettings();
+var span = settings.filter(function (x) { return x.name == "#scanspan"; });
+var monitor = node_schedule_1.default.scheduleJob('0 */' + span[0].value + ' * * * *', function () {
     return __awaiter(this, void 0, void 0, function () {
         var m;
         return __generator(this, function (_a) {

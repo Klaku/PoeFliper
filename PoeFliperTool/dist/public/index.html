@@ -73,6 +73,7 @@
                 var options = {
                     exportEnabled: false,
                     animationEnabled: true,
+                    zoomEnabled:true,
                     theme: "dark2",
                     backgroundColor: "#444444",
                     title:{
@@ -100,8 +101,7 @@
                         fillOpacity: .3,
                         color: "red",
                         markerType: "circle",
-                        markerSize: 5,
-                        connectNullData: true,
+                        connectNullData: false,
                         dataPoints: response.map(x => {
                                 return {
                                     x: new Date(Number(x.Time)),
@@ -114,9 +114,8 @@
                         showInLegend: true,
                         name: "2nd Item",
                         color: "yellow",
-                        connectNullData: true,
+                        connectNullData: false,
                         fillOpacity: .3,
-                        markerSize: 5,
                         markerType: "circle",
                         dataPoints: response.map(x => {
                                 return {
@@ -127,12 +126,11 @@
                     },{
                         type: "line",
                         showInLegend: true,
-                        connectNullData: true,
+                        connectNullData: false,
                         name: "1st Item",
                         fillOpacity: .3,
                         markerType: "circle",
                         color: "green",
-                        markerSize: 5,
                         dataPoints: response.map(x => {
                                 return {
                                     x: new Date(Number(x.Time)),

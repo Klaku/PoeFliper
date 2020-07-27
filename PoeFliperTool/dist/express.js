@@ -36,6 +36,13 @@ var ExpressApp = /** @class */ (function () {
         app.get('/data/:id', function (req, rep) {
             rep.send(csvHelper_1.default.GetData(req.params.id));
         });
+        app.get('/settings', function (req, rep) {
+            rep.send(csvHelper_1.default.getSettings());
+        });
+        app.post('/settings', function (req, rep) {
+            csvHelper_1.default.setSettingValue(req.body.name, req.body.value);
+            rep.send();
+        });
         app.listen(8510);
     };
     return ExpressApp;
