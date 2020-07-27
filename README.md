@@ -18,7 +18,7 @@ $ node install.js
    - Go to C:\<Your dream folder>
    - Unpack the zip package
    - (Optional) Do not copy dist/appFiles/data.csv and dist/appFiles/items.csv if you want to keep your data
-   - Restart process.
+   - Restart service.
    
   # How do I turn on notifications?
   
