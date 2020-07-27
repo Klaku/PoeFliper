@@ -14,7 +14,7 @@ $ node install.js
 ```
   - Go to [Dashboard](http://localhost:8510) and save it on Bookmark Panel
   # How to update
-   - Download latest [releases](https://github.com/Klaku/PoeFliper/releases)
+   - Download latest [release](https://github.com/Klaku/PoeFliper/releases)
    - Go to C:\<Your dream folder>
    - Unpack the zip package
    - (Optional) Do not copy dist/appFiles/data.csv and dist/appFiles/items.csv if you want to keep your data
